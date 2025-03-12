@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+	<changeSet id="1" author="annett">
+		<createTable tableName="customers">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="name" type="varchar(255)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="email" type="varchar(255)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="phone_number" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="2" author="annett">
+		<createTable tableName="accounts">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="customer_id" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="balance" type="decimal(15,2)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="currency" type="varchar(3)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="fk_customer_id"
+		                         baseTableName="accounts"
+		                         baseColumnNames="customer_id"
+		                         referencedTableName="customers"
+		                         referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet id="3" author="annett">
+		<createTable tableName="transactions">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="account_id" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="transaction_type" type="varchar(10)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="amount" type="decimal(15,2)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="transaction_date" type="timestamp">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="fk_account_id"
+		                         baseTableName="transactions"
+				                 baseColumnNames="account_id"
+		                         referencedTableName="accounts"
+		                         referencedColumnNames="id"/>
+	</changeSet>
+
+	<changeSet id="4" author="annett">
+		<createTable tableName="currency_exchange_rates">
+			<column name="id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="currency_from" type="varchar(3)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="currency_to" type="varchar(3)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="exchange_rate" type="decimal(10,4)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>
